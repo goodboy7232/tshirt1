@@ -1,0 +1,108 @@
+/* Real 2D garment photography */
+.brand-image img {
+  background: transparent;
+  border-radius: 0;
+  filter: drop-shadow(0 4px 5px rgba(37, 42, 53, .18));
+}
+
+.shirt-photo-frame {
+  align-items: center;
+  background: #e9e4db;
+  display: flex;
+  height: min(92%, 420px);
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: min(88%, 360px);
+}
+
+.shirt-photo-frame img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+
+.shirt-photo-frame::after {
+  border: 1px solid rgba(255, 255, 255, .5);
+  content: '';
+  inset: 12px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+}
+
+.photo-print {
+  background: rgba(255, 253, 250, .86);
+  color: var(--ink);
+  font: 16px var(--app-font-mono);
+  left: 50%;
+  letter-spacing: .08em;
+  max-width: 48%;
+  padding: 12px 17px;
+  position: absolute;
+  text-align: center;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.photo-view-back .shirt-photo-frame img { filter: saturate(.82) brightness(.94); transform: scaleX(-1); }
+.photo-view-left .shirt-photo-frame img { object-position: 35% center; transform: scale(1.12); }
+.photo-view-right .shirt-photo-frame img { object-position: 65% center; transform: scale(1.12); }
+
+.hero-shirt-wrap .shirt-stage { height: 370px; width: 320px; }
+.hero-shirt-wrap .shirt-photo-frame { height: 330px; width: 275px; }
+.hero-shirt-wrap .shirt-photo-frame img { object-fit: cover; }
+
+.mockup-shirt .shirt-stage { height: 240px; width: 190px; }
+.mockup-shirt .shirt-photo-frame { height: 220px; width: 160px; }
+.mockup-shirt .photo-print { font-size: 10px; padding: 6px 9px; }
+
+.product-image .shirt-stage {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  inset: 0;
+  justify-content: center;
+  width: 100%;
+}
+
+.product-image .shirt-photo-frame { height: 91%; width: 86%; }
+.product-image .photo-print { font-size: 12px; padding: 9px 12px; }
+
+.editor-preview-panel .shirt-stage {
+  align-items: center;
+  display: flex;
+  inset: 85px 10% 75px;
+  justify-content: center;
+}
+
+.editor-preview-panel .shirt-photo-frame {
+  height: 92%;
+  max-height: 540px;
+  width: min(64%, 380px);
+}
+
+.editor-preview-panel .photo-print { font-size: 19px; }
+
+.squad-stack .shirt-stage {
+  align-items: center;
+  display: flex;
+  height: 360px;
+  justify-content: center;
+}
+
+.squad-stack .shirt-photo-frame { height: 290px; width: 200px; }
+.squad-stack .photo-print { font-size: 11px; padding: 7px 9px; }
+.catalog-page .product-type { color: var(--coral); }
+.catalog-page .product-card > p { min-height: 25px; }
+
+@media (max-width: 680px) {
+  .brand-image img { width: 135px; }
+  .hero-shirt-wrap .shirt-stage { height: 350px; width: 290px; }
+  .hero-shirt-wrap .shirt-photo-frame { height: 315px; width: 245px; }
+  .product-image .shirt-photo-frame { height: 90%; width: 88%; }
+  .editor-preview-panel .shirt-photo-frame { height: 84%; width: 75%; }
+  .squad-stack .shirt-photo-frame { height: 225px; width: 150px; }
+}

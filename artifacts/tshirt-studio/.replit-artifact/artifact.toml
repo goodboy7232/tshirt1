@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "T-Shirt Studio"
+description = "A guest-first custom t-shirt designer with live pricing, color and print placement controls, and a frictionless login gate for saving designs and checkout."
+version = "1.0.0"
+id = "artifacts/tshirt-studio"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18280
+
+[services.development]
+run = "pnpm --filter @workspace/tshirt-studio run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/tshirt-studio", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/tshirt-studio/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18280"
+BASE_PATH = "/"
