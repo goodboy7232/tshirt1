@@ -132,6 +132,7 @@ h2 { font-size: clamp(49px, 6vw, 82px); line-height: .86; margin-bottom: 0; }
 .choice-card svg { position: absolute; top: 7px; right: 7px; color: var(--coral); }
 .choice-card.selected { border-color: var(--coral); background: rgba(232,75,53,.07); }
 .elow-row { display: flex; justify-content: space-between; gap: 15px; align-items: center; margin-left: 28px; padding: 9px 0; }
+.elow-featured { background: rgba(232,75,53,.08); border: 1px solid rgba(232,75,53,.22); border-radius: 10px; padding: 14px; }
 .elow-row strong { font: 13px var(--app-font-mono); letter-spacing: .05em; display: block; }
 .elow-row > div > span { color: var(--muted); font-size: 10px; }
 .elow-choices { display: flex; gap: 3px; }
@@ -199,6 +200,7 @@ h2 { font-size: clamp(49px, 6vw, 82px); line-height: .86; margin-bottom: 0; }
 .modal-mark { width: 42px; height: 42px; background: var(--coral); color: var(--paper); display: grid; place-items: center; margin-bottom: 33px; }
 .otp-modal h2 { font-size: 53px; margin-bottom: 20px; }
 .modal-copy { color: var(--muted); font-size: 12px; line-height: 1.6; max-width: 310px; }
+.auth-error { color: #b42318; font-size: 11px; line-height: 1.5; margin: 14px 0 0; }
 .phone-label { display: block; margin-top: 25px; color: var(--muted); font-size: 10px; }
 .phone-input { border-bottom: 1px solid var(--ink); display: flex; align-items: center; gap: 13px; padding: 11px 0; margin-top: 8px; }
 .phone-input span { font: 12px var(--app-font-mono); }
