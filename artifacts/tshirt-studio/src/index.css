@@ -132,7 +132,6 @@ h2 { font-size: clamp(49px, 6vw, 82px); line-height: .86; margin-bottom: 0; }
 .choice-card svg { position: absolute; top: 7px; right: 7px; color: var(--coral); }
 .choice-card.selected { border-color: var(--coral); background: rgba(232,75,53,.07); }
 .elow-row { display: flex; justify-content: space-between; gap: 15px; align-items: center; margin-left: 28px; padding: 9px 0; }
-.elow-featured { background: rgba(232,75,53,.08); border: 1px solid rgba(232,75,53,.22); border-radius: 10px; padding: 14px; }
 .elow-row strong { font: 13px var(--app-font-mono); letter-spacing: .05em; display: block; }
 .elow-row > div > span { color: var(--muted); font-size: 10px; }
 .elow-choices { display: flex; gap: 3px; }

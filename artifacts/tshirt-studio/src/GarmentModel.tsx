@@ -41,13 +41,9 @@ const regularBack =
 const oversizedBack =
   'M207 69 Q187 63 166 73 Q134 82 105 105 L18 197 Q10 207 18 217 L72 267 Q82 276 92 265 L117 236 L127 260 L122 490 Q121 515 143 520 L357 520 Q379 515 378 490 L373 260 L383 236 L408 265 Q418 276 428 267 L482 217 Q490 207 482 197 L395 105 Q366 82 334 73 Q313 63 293 69 Q250 99 207 69 Z';
 const sideTorso =
-  'M218 82 Q246 66 278 78 Q306 90 328 116 Q350 148 344 188 L338 452 Q336 480 310 492 L198 492 Q176 484 180 454 L184 248 Q178 214 184 176 Q192 126 218 82 Z';
-const oversizedSideTorso =
-  'M210 78 Q242 58 282 72 Q316 84 342 112 Q368 144 362 188 L354 454 Q352 488 320 498 L188 498 Q158 486 164 452 L168 252 Q160 216 168 172 Q178 122 210 78 Z';
+  'M224 82 Q248 68 274 78 Q302 90 320 112 Q340 139 338 176 L332 454 Q330 481 306 490 L202 490 Q180 482 184 454 L188 248 Q181 214 188 174 Q196 126 224 82 Z';
 const sideSleeve =
-  'M218 96 Q188 102 162 122 Q132 142 112 164 L58 218 Q42 234 50 252 L72 268 Q88 278 104 266 L142 230 Q166 208 184 176 L224 126 Z';
-const oversizedSideSleeve =
-  'M210 92 Q178 98 148 120 Q116 142 92 168 L32 220 Q14 236 22 256 L50 278 Q68 290 88 276 L130 238 Q158 214 178 178 L220 124 Z';
+  'M224 96 Q196 100 174 118 Q148 136 128 158 L78 214 Q64 230 72 246 L94 264 Q108 274 124 262 L158 228 Q180 208 198 178 L230 128 Z';
 
 function NeckDetails({ neck, back, color }: { neck: Product['neck']; back: boolean; color: string }) {
   if (back) {
@@ -98,13 +94,11 @@ function SideNeckDetails({ neck, color }: { neck: Product['neck']; color: string
   if (neck === 'Polo collar') {
     return (
       <g>
-        <path d="M222 72 Q248 94 278 78 L290 92 Q260 112 216 92 Z" fill="#252a35" opacity=".92" />
-        <path d="M216 78 Q236 90 256 98 L238 112 Q220 104 208 90 Z" fill={`color-mix(in srgb, ${color} 66%, white)`} stroke="#59606a" strokeOpacity=".48" strokeWidth="2" />
-        <path d="M278 80 L258 98 L252 114 L276 104 L290 90 Z" fill={`color-mix(in srgb, ${color} 66%, white)`} stroke="#59606a" strokeOpacity=".42" strokeWidth="2" />
-        <path d="M248 98 L258 114" stroke="#555c66" strokeOpacity=".62" strokeWidth="2" />
-        <path d="M238 102 L252 118" stroke="white" strokeOpacity=".6" strokeWidth="2" />
-        <circle cx="252" cy="122" r="2.4" fill="#4b5059" />
-        <circle cx="250" cy="136" r="2.4" fill="#4b5059" />
+        <path d="M221 72 Q248 89 276 72 L286 86 Q258 107 218 91 Z" fill="#292d35" opacity=".88" />
+        <path d="M214 78 Q235 89 255 94 L239 108 Q222 101 210 89 Z" fill={`color-mix(in srgb, ${color} 68%, white)`} stroke="#59606a" strokeOpacity=".48" strokeWidth="2" />
+        <path d="M276 75 L256 93 L252 108 L273 99 L287 84 Z" fill={`color-mix(in srgb, ${color} 66%, white)`} stroke="#59606a" strokeOpacity=".42" strokeWidth="2" />
+        <path d="M246 94 L255 111" stroke="#555c66" strokeOpacity=".62" strokeWidth="2" />
+        <path d="M238 98 L249 115" stroke="white" strokeOpacity=".6" strokeWidth="2" />
       </g>
     );
   }
@@ -139,7 +133,7 @@ export function GarmentModel({
   const back = view === 'back';
   const side = view === 'left' || view === 'right';
   const shape = side
-    ? fit === 'Oversized' ? oversizedSideTorso : sideTorso
+    ? sideTorso
     : back
       ? fit === 'Oversized' ? oversizedBack : regularBack
       : fit === 'Oversized' ? oversizedFront : regularFront;
@@ -152,9 +146,15 @@ export function GarmentModel({
   const printBox = back
     ? { x: 158, y: 145, width: 184, height: 260 }
     : { x: 160, y: 190, width: 180, height: 215 };
-  const sidePrintBox = { x: 92, y: 174, width: 76, height: 68 };
-  const flipSide = side && view === 'right' ? 'translate(500 0) scale(-1 1)' : undefined;
-  const rasterRender = null;
+  const sidePrintBox = view === 'left'
+    ? { x: 92, y: 174, width: 76, height: 68 }
+    : { x: 332, y: 174, width: 76, height: 68 };
+  const flipSide = view === 'right' ? 'translate(500 0) scale(-1 1)' : undefined;
+  const rasterRender = neck === 'Polo collar'
+    ? back
+      ? '/product-images/polo-back-render.png'
+      : null
+    : null;
 
   return (
     <svg
@@ -174,11 +174,9 @@ export function GarmentModel({
           <stop offset="100%" stopColor={`color-mix(in srgb, ${color} 58%, #252a34)`} />
         </linearGradient>
         <linearGradient id="garment-sleeve" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={`color-mix(in srgb, ${color} 58%, #252a34)`} />
-          <stop offset="22%" stopColor={`color-mix(in srgb, ${color} 84%, #252a34)`} />
-          <stop offset="48%" stopColor={`color-mix(in srgb, ${color} 82%, white)`} />
-          <stop offset="72%" stopColor={color} />
-          <stop offset="100%" stopColor={`color-mix(in srgb, ${color} 62%, #252a34)`} />
+          <stop offset="0%" stopColor={`color-mix(in srgb, ${color} 74%, #252a34)`} />
+          <stop offset="50%" stopColor={color} />
+          <stop offset="100%" stopColor={`color-mix(in srgb, ${color} 74%, white)`} />
         </linearGradient>
         <linearGradient id="garment-fold" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="white" stopOpacity=".5" />
@@ -196,7 +194,6 @@ export function GarmentModel({
       </defs>
 
       <ellipse cx="250" cy="500" rx="151" ry="15" fill="#62666d" opacity=".17" filter="url(#garment-shadow)" />
-      {side && <ellipse cx="250" cy="500" rx={fit === 'Oversized' ? 176 : 158} ry="18" fill="#1f2530" opacity=".12" filter="url(#garment-shadow)" />}
       <g transform={flipSide}>
         <g>
         {rasterRender ? (
@@ -226,11 +223,12 @@ export function GarmentModel({
           <>
         {side && (
           <>
-            <path d={fit === 'Oversized' ? oversizedSideSleeve : sideSleeve} fill="url(#garment-sleeve)" stroke="#555c66" strokeOpacity=".48" strokeWidth="2.2" strokeLinejoin="round" />
-            <path d="M58 218 Q68 238 72 268" fill="none" stroke="#4f5661" strokeOpacity=".42" strokeWidth="4" />
-            <path d="M50 252 Q68 274 104 266" fill="none" stroke="#626873" strokeOpacity=".72" strokeWidth="5" />
-            <path d="M54 244 Q72 264 100 258" fill="none" stroke="white" strokeOpacity=".62" strokeWidth="2" />
-            <path d="M78 252 Q88 224 106 202" fill="none" stroke="white" strokeOpacity=".26" strokeWidth="8" />
+            <path d={sideSleeve} fill="url(#garment-sleeve)" stroke="#555c66" strokeOpacity=".48" strokeWidth="2.2" strokeLinejoin="round" />
+            <path d="M78 214 Q88 234 94 264" fill="none" stroke="#4f5661" strokeOpacity=".42" strokeWidth="4" />
+            <path d="M72 246 Q92 266 124 262" fill="none" stroke="#626873" strokeOpacity=".72" strokeWidth="5" />
+            <path d="M76 238 Q94 258 120 254" fill="none" stroke="white" strokeOpacity=".62" strokeWidth="2" />
+            <path d="M102 246 Q112 220 128 198" fill="none" stroke="white" strokeOpacity=".26" strokeWidth="8" />
+            <path d="M128 158 Q154 174 178 204" fill="none" stroke="#4e5560" strokeOpacity=".36" strokeWidth="3" />
           </>
         )}
         <path

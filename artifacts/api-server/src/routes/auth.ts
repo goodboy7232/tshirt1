@@ -85,67 +85,10 @@ database.run(`
     status TEXT NOT NULL DEFAULT 'new',
     created_at TEXT NOT NULL
   );
-  CREATE TABLE IF NOT EXISTS store_settings (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL,
-    updated_at TEXT NOT NULL
-  );
 `);
 try { database.run("ALTER TABLE orders ADD COLUMN payment_method TEXT NOT NULL DEFAULT 'full'"); } catch { /* Existing database already has this column. */ }
 try { database.run("ALTER TABLE orders ADD COLUMN payment_due INTEGER NOT NULL DEFAULT 0"); } catch { /* Existing database already has this column. */ }
 database.run("UPDATE orders SET payment_due = total WHERE payment_due = 0");
-const defaultSettings = {
-  upiId: process.env.VITE_UPI_ID ?? "",
-  payeeName: process.env.VITE_UPI_PAYEE ?? "Backbenchers",
-  fullPaymentEnabled: "true",
-  bookingPaymentEnabled: "true",
-  bookingAmount: "100",
-  codEnabled: "false",
-  deliveryThreshold: "500",
-  deliveryCharge: "60",
-  paymentInstructions: "Complete your payment and upload the screenshot. Orders are produced after admin verification.",
-  catalogProducts: JSON.stringify([
-    { id: "regular-white", name: "Regular Fit Round Neck", type: "Round neck", fit: "Regular fit", neck: "Round neck", price: 220, color: "#ebe8df", colorName: "Cloud white", gsm: "180 GSM cotton", tag: "Best seller", description: "A clean everyday tee made for custom prints.", image: "/product-images/regular-fit-white.jpg" },
-    { id: "regular-black", name: "Regular Fit Black Tee", type: "Round neck", fit: "Regular fit", neck: "Round neck", price: 220, color: "#202228", colorName: "Jet black", gsm: "180 GSM cotton", tag: "Everyday", image: "" },
-    { id: "oversized-black", name: "Oversized Street Tee", type: "Round neck", fit: "Oversized", neck: "Round neck", price: 280, color: "#202228", colorName: "Washed black", gsm: "240 GSM heavyweight", tag: "Oversized", image: "/product-images/oversized-black.jpg" },
-    { id: "oversized-red", name: "Oversized Statement Tee", type: "Round neck", fit: "Oversized", neck: "Round neck", price: 280, color: "#c83b2d", colorName: "Street red", gsm: "240 GSM heavyweight", tag: "New", image: "" },
-    { id: "v-neck-cream", name: "V-Neck Essential", type: "Round neck", fit: "Regular fit", neck: "V neck", price: 240, color: "#d9c9ae", colorName: "Warm cream", gsm: "180 GSM cotton", tag: "V neck", image: "/product-images/v-neck-white.jpg" },
-    { id: "polo-white", name: "Regular Fit Polo", type: "Polo collar", fit: "Regular fit", neck: "Polo collar", price: 320, color: "#ebe8df", colorName: "Cloud white", gsm: "220 GSM pique", tag: "Polo", image: "" },
-    { id: "polo-navy", name: "Everyday Navy Polo", type: "Polo collar", fit: "Regular fit", neck: "Polo collar", price: 320, color: "#273b65", colorName: "Midnight navy", gsm: "220 GSM pique", tag: "Premium", image: "/product-images/polo-navy.jpg" },
-    { id: "polo-green", name: "Campus Green Polo", type: "Polo collar", fit: "Regular fit", neck: "Polo collar", price: 320, color: "#38584a", colorName: "Forest green", gsm: "220 GSM pique", tag: "College pick", image: "" },
-  ]),
-  readyMadeCategories: JSON.stringify([
-    { slug: "gangster", name: "Gangster", icon: "🔥", color: "#d7422e" },
-    { slug: "gaming", name: "Gaming", icon: "🎮", color: "#5f6bd6" },
-    { slug: "dark", name: "Dark", icon: "💀", color: "#252935" },
-    { slug: "meme", name: "Meme", icon: "😂", color: "#e7b93d" },
-    { slug: "couple", name: "Couple", icon: "❤️", color: "#de5571" },
-    { slug: "music", name: "Music", icon: "🎵", color: "#7156a8" },
-    { slug: "gym", name: "Gym", icon: "🏋️", color: "#bc5d30" },
-    { slug: "biker", name: "Biker", icon: "🏍️", color: "#3e4952" },
-    { slug: "coding", name: "Coding", icon: "🧑‍💻", color: "#3a8b72" },
-    { slug: "cyberpunk", name: "Cyberpunk", icon: "☠️", color: "#35a4a0" },
-    { slug: "india", name: "India", icon: "🇮🇳", color: "#e58b38" },
-    { slug: "college", name: "College", icon: "🎓", color: "#4871b6" },
-  ]),
-  readyMadeDesigns: JSON.stringify([
-    { id: "gangster-01", category: "gangster", name: "Gangster original", color: "#d7422e", accent: "#f5f1e9", mark: "🔥", description: "Bold street energy.", tags: "street, bold" },
-    { id: "gaming-01", category: "gaming", name: "Gaming original", color: "#5f6bd6", accent: "#1f2430", mark: "🎮", description: "Made for the squad.", tags: "gaming, squad" },
-    { id: "dark-01", category: "dark", name: "Dark original", color: "#252935", accent: "#f5f1e9", mark: "💀", description: "A darker statement.", tags: "dark, minimal" },
-    { id: "meme-01", category: "meme", name: "Meme original", color: "#e7b93d", accent: "#1f2430", mark: "😂", description: "Wear the joke.", tags: "meme, fun" },
-    { id: "couple-01", category: "couple", name: "Couple original", color: "#de5571", accent: "#f5f1e9", mark: "❤️", description: "Designed to match.", tags: "couple, love" },
-    { id: "music-01", category: "music", name: "Music original", color: "#7156a8", accent: "#1f2430", mark: "🎵", description: "Your sound, your style.", tags: "music" },
-    { id: "gym-01", category: "gym", name: "Gym original", color: "#bc5d30", accent: "#f5f1e9", mark: "🏋️", description: "Built for training days.", tags: "gym, fitness" },
-    { id: "biker-01", category: "biker", name: "Biker original", color: "#3e4952", accent: "#1f2430", mark: "🏍️", description: "Ride your own line.", tags: "biker" },
-    { id: "coding-01", category: "coding", name: "Coding original", color: "#3a8b72", accent: "#f5f1e9", mark: "🧑‍💻", description: "For builders and makers.", tags: "coding, developer" },
-    { id: "cyberpunk-01", category: "cyberpunk", name: "Cyberpunk original", color: "#35a4a0", accent: "#1f2430", mark: "☠️", description: "Future-facing graphics.", tags: "cyberpunk" },
-    { id: "india-01", category: "india", name: "India original", color: "#e58b38", accent: "#f5f1e9", mark: "🇮🇳", description: "A bright India-inspired design.", tags: "india" },
-    { id: "college-01", category: "college", name: "College original", color: "#4871b6", accent: "#1f2430", mark: "🎓", description: "Made for campus memories.", tags: "college, campus" },
-  ]),
-};
-for (const [key, value] of Object.entries(defaultSettings)) {
-  if (!getRow("SELECT key FROM store_settings WHERE key = ?", [key])) run("INSERT INTO store_settings (key, value, updated_at) VALUES (?, ?, ?)", [key, value, new Date().toISOString()]);
-}
 
 function persistDatabase() {
   const temporaryPath = `${databasePath}.tmp`;
@@ -177,24 +120,6 @@ function allRows<T extends object>(sql: string, values: unknown[] = []): T[] {
   } finally {
     statement.free();
   }
-}
-
-function setting(key: string) {
-  return getRow<{ value: string }>("SELECT value FROM store_settings WHERE key = ?", [key])?.value ?? defaultSettings[key as keyof typeof defaultSettings] ?? "";
-}
-
-function publicPaymentSettings() {
-  return {
-    upiId: setting("upiId"),
-    payeeName: setting("payeeName"),
-    fullPaymentEnabled: setting("fullPaymentEnabled") === "true",
-    bookingPaymentEnabled: setting("bookingPaymentEnabled") === "true",
-    bookingAmount: Number(setting("bookingAmount")) || 100,
-    codEnabled: setting("codEnabled") === "true",
-    deliveryThreshold: Number(setting("deliveryThreshold")) || 500,
-    deliveryCharge: Number(setting("deliveryCharge")) || 60,
-    paymentInstructions: setting("paymentInstructions"),
-  };
 }
 
 function run(sql: string, values: unknown[] = []) {
@@ -238,50 +163,16 @@ function currentUser(request: Request) {
   return user;
 }
 
-type CatalogProduct = {
-  id: string;
-  name: string;
-  type: string;
-  fit: string;
-  neck: string;
-  price: number;
-  color: string;
-  colorName: string;
-  gsm: string;
-  tag: string;
-  description: string;
-  image: string;
+const productPrices: Record<string, number> = {
+  "regular-white": 220,
+  "regular-black": 220,
+  "oversized-black": 280,
+  "oversized-red": 280,
+  "v-neck-cream": 240,
+  "polo-white": 320,
+  "polo-navy": 320,
+  "polo-green": 320,
 };
-function catalogProducts(): CatalogProduct[] {
-  try {
-    const parsed = JSON.parse(setting("catalogProducts")) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map((value) => {
-      const product = value as CatalogProduct;
-      const neckText = String(product.neck ?? "").toLowerCase().replace(/[^a-z]/g, "");
-      const typeText = String(product.type ?? "").toLowerCase().replace(/[^a-z]/g, "");
-      const neck = neckText === "vneck" || neckText === "vnecck" || typeText === "vneck" ? "V neck" : neckText === "polocollar" || typeText === "polocollar" ? "Polo collar" : "Round neck";
-      return { ...product, type: neck, neck, fit: String(product.fit ?? "").toLowerCase().includes("oversized") ? "Oversized" : "Regular fit", description: product.description ?? "" };
-    });
-  } catch {
-    return [];
-  }
-}
-function validCatalogImage(value: string) {
-  if (!value) return true;
-  if (/^\/[^\s]{1,500}$/.test(value) || /^https:\/\//.test(value)) return true;
-  if (!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(value) || value.length > 5_600_000) return false;
-  return Buffer.from(value.split(",")[1] ?? "", "base64").byteLength <= 4 * 1024 * 1024;
-}
-function readyMadeData() {
-  try {
-    const categories = JSON.parse(setting("readyMadeCategories")) as unknown[];
-    const designs = JSON.parse(setting("readyMadeDesigns")) as unknown[];
-    return { categories: Array.isArray(categories) ? categories : [], designs: Array.isArray(designs) ? designs : [] };
-  } catch {
-    return { categories: [], designs: [] };
-  }
-}
 const allowedSizes = new Set(["XS", "S", "M", "L", "XL", "2XL"]);
 type DesignConfig = {
   productId: string;
@@ -328,9 +219,7 @@ function normalizedDocument(value: unknown): string | null | undefined {
 function normalizedConfig(value: unknown): DesignConfig | undefined {
   if (!value || typeof value !== "object") return undefined;
   const config = value as Record<string, unknown>;
-  const product = catalogProducts().find((item) => item.id === config.productId);
-  if (!product || !Number.isInteger(product.price) || product.price < 1) return undefined;
-  const productId = String(config.productId);
+  if (typeof config.productId !== "string" || !productPrices[config.productId]) return undefined;
   if (typeof config.color !== "string" || !/^#[0-9a-f]{6}$/i.test(config.color)) return undefined;
   if (!(config.placement === "none" || config.placement === "front" || config.placement === "back" || config.placement === "both" || config.placement === "sides" || config.placement === "all" || config.placement === "custom")) return undefined;
   if (!(config.elow === "none" || config.elow === "one" || config.elow === "two")) return undefined;
@@ -360,19 +249,17 @@ function normalizedConfig(value: unknown): DesignConfig | undefined {
     left: Boolean(leftArtwork || leftText), right: Boolean(rightArtwork || rightText),
   };
   if (validSides.some((side) => sideContent[side] && !printSides.includes(side))) return undefined;
-  return { productId, color: String(config.color), placement: config.placement, printSides, elow: config.elow, frontText, backText, leftText, rightText, size: String(config.size), quantity: config.quantity, artwork: artwork ?? null, backArtwork: backArtwork ?? null, leftArtwork: leftArtwork ?? null, rightArtwork: rightArtwork ?? null, frontDocument: frontDocument ?? null, backDocument: backDocument ?? null, leftDocument: leftDocument ?? null, rightDocument: rightDocument ?? null };
+  return { productId: config.productId, color: config.color, placement: config.placement, printSides, elow: config.elow, frontText, backText, leftText, rightText, size: config.size, quantity: config.quantity, artwork: artwork ?? null, backArtwork: backArtwork ?? null, leftArtwork: leftArtwork ?? null, rightArtwork: rightArtwork ?? null, frontDocument: frontDocument ?? null, backDocument: backDocument ?? null, leftDocument: leftDocument ?? null, rightDocument: rightDocument ?? null };
 }
 
 function quoteLine(config: DesignConfig) {
-  const product = catalogProducts().find((item) => item.id === config.productId);
-  if (!product) throw new Error("Catalog product is unavailable.");
   const sides = config.printSides ?? (config.placement === "front" ? ["front"] : config.placement === "back" ? ["back"] : config.placement === "both" ? ["front", "back"] : config.placement === "sides" ? ["left", "right"] : config.placement === "all" ? ["front", "back", "left", "right"] : []);
   const frontBackOnly = sides.length === 2 && sides.includes("front") && sides.includes("back");
   const allSides = sides.length === 4;
   const print = allSides ? 300 : frontBackOnly ? 200 : sides.reduce((total, side) => total + (side === "left" || side === "right" ? 80 : 120), 0);
   const elow = { none: 0, one: 50, two: 50 }[config.elow];
   const text = [config.frontText, config.backText, config.leftText, config.rightText].filter(Boolean).length * 50;
-  const unitPrice = product.price + print + elow + text;
+  const unitPrice = productPrices[config.productId] + print + elow + text;
   return { config, unitPrice, lineTotal: unitPrice * config.quantity };
 }
 
@@ -554,139 +441,7 @@ router.get("/admin/overview", (request, response) => {
     response.status(403).json({ error: "Administrator access required." });
     return;
   }
-  const orders = allRows<{ status: string; total: number; payment_status: string }>("SELECT status, total, payment_status FROM orders");
-  response.json({
-    user: publicUser(user),
-    message: "Admin access verified.",
-    metrics: {
-      orders: orders.length,
-      paymentReviews: orders.filter((order) => order.status === "payment_review").length,
-      processing: orders.filter((order) => order.status === "processing").length,
-      delivered: orders.filter((order) => order.status === "delivered").length,
-      verifiedRevenue: orders.filter((order) => order.payment_status === "verified").reduce((sum, order) => sum + Number(order.total), 0),
-    },
-  });
-});
-
-router.get("/payment/settings", (_request, response) => {
-  response.json({ settings: publicPaymentSettings() });
-});
-
-router.get("/catalog", (_request, response) => {
-  response.json({ products: catalogProducts() });
-});
-
-router.get("/admin/catalog", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  response.json({ products: catalogProducts() });
-});
-
-router.patch("/admin/catalog", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  const products = request.body?.products;
-  if (!Array.isArray(products) || products.length < 1 || products.length > 100) {
-    response.status(400).json({ error: "Catalog must contain between 1 and 100 products." });
-    return;
-  }
-  const normalized = products.map((product: unknown) => {
-    const item = product as Record<string, unknown>;
-    const text = (key: string, limit: number) => typeof item[key] === "string" ? item[key].trim().slice(0, limit) : "";
-    return {
-      id: text("id", 80),
-      name: text("name", 120),
-      type: text("type", 40),
-      fit: text("fit", 40),
-      neck: text("neck", 40),
-      price: typeof item.price === "number" ? item.price : Number.NaN,
-      color: text("color", 7),
-      colorName: text("colorName", 60),
-      gsm: text("gsm", 60),
-      tag: text("tag", 60),
-      description: text("description", 500),
-      image: text("image", 500),
-    };
-  });
-  if (normalized.some((product) => !product.id || !product.name || !Number.isInteger(product.price) || Number(product.price) < 1 || Number(product.price) > 100000 || !/^#[0-9a-f]{6}$/i.test(product.color) || !validCatalogImage(product.image))) {
-    response.status(400).json({ error: "Each product needs a valid id, name, hex color, whole-number price and supported image." });
-    return;
-  }
-  const ids = normalized.map((product) => product.id);
-  if (new Set(ids).size !== ids.length) {
-    response.status(400).json({ error: "Product IDs must be unique." });
-    return;
-  }
-  run("INSERT INTO store_settings (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at", ["catalogProducts", JSON.stringify(normalized), new Date().toISOString()]);
-  response.json({ products: catalogProducts() });
-});
-
-router.get("/ready-made", (_request, response) => {
-  response.json(readyMadeData());
-});
-
-router.get("/admin/ready-made", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  response.json(readyMadeData());
-});
-
-router.patch("/admin/ready-made", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  const categories = request.body?.categories;
-  const designs = request.body?.designs;
-  if (!Array.isArray(categories) || !Array.isArray(designs) || categories.length < 1 || categories.length > 100 || designs.length > 500) {
-    response.status(400).json({ error: "Add at least one category and use no more than 100 categories or 500 designs." });
-    return;
-  }
-  const text = (value: unknown, limit: number) => typeof value === "string" ? value.trim().slice(0, limit) : "";
-  const normalizedCategories = categories.map((value: unknown) => {
-    const item = value as Record<string, unknown>;
-    return { slug: text(item.slug, 80).toLowerCase().replace(/[^a-z0-9-]/g, "-"), name: text(item.name, 80), icon: text(item.icon, 8), color: text(item.color, 7) };
-  });
-  const normalizedDesigns = designs.map((value: unknown) => {
-    const item = value as Record<string, unknown>;
-    return { id: text(item.id, 100), category: text(item.category, 80), name: text(item.name, 120), color: text(item.color, 7), accent: text(item.accent, 7), mark: text(item.mark, 8), description: text(item.description, 500), tags: text(item.tags, 200), image: text(item.image, 500) };
-  });
-  const categorySlugs = normalizedCategories.map((item) => item.slug);
-  if (new Set(categorySlugs).size !== categorySlugs.length || normalizedCategories.some((item) => !item.slug || !item.name || !/^#[0-9a-f]{6}$/i.test(item.color))) {
-    response.status(400).json({ error: "Categories need unique slugs, names and valid hex colors." });
-    return;
-  }
-  if (new Set(normalizedDesigns.map((item) => item.id)).size !== normalizedDesigns.length || normalizedDesigns.some((item) => !item.id || !item.name || !categorySlugs.includes(item.category) || !/^#[0-9a-f]{6}$/i.test(item.color) || !/^#[0-9a-f]{6}$/i.test(item.accent) || !validCatalogImage(item.image))) {
-    response.status(400).json({ error: "Designs need unique IDs, valid category, colors and supported image URLs." });
-    return;
-  }
-  const now = new Date().toISOString();
-  for (const [key, value] of [["readyMadeCategories", JSON.stringify(normalizedCategories)], ["readyMadeDesigns", JSON.stringify(normalizedDesigns)]]) {
-    run("INSERT INTO store_settings (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at", [key, value, now]);
-  }
-  response.json(readyMadeData());
-});
-
-router.get("/admin/settings/payment", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  response.json({ settings: publicPaymentSettings() });
-});
-
-router.patch("/admin/settings/payment", (request, response) => {
-  if (!adminOnly(request, response)) return;
-  const body = request.body ?? {};
-  const next = {
-    upiId: typeof body.upiId === "string" ? body.upiId.trim().slice(0, 120) : setting("upiId"),
-    payeeName: typeof body.payeeName === "string" ? body.payeeName.trim().slice(0, 120) : setting("payeeName"),
-    fullPaymentEnabled: body.fullPaymentEnabled === true ? "true" : body.fullPaymentEnabled === false ? "false" : setting("fullPaymentEnabled"),
-    bookingPaymentEnabled: body.bookingPaymentEnabled === true ? "true" : body.bookingPaymentEnabled === false ? "false" : setting("bookingPaymentEnabled"),
-    bookingAmount: Number.isInteger(body.bookingAmount) && body.bookingAmount > 0 && body.bookingAmount <= 100000 ? String(body.bookingAmount) : setting("bookingAmount"),
-    codEnabled: "false",
-    deliveryThreshold: Number.isInteger(body.deliveryThreshold) && body.deliveryThreshold >= 0 && body.deliveryThreshold <= 100000 ? String(body.deliveryThreshold) : setting("deliveryThreshold"),
-    deliveryCharge: Number.isInteger(body.deliveryCharge) && body.deliveryCharge >= 0 && body.deliveryCharge <= 100000 ? String(body.deliveryCharge) : setting("deliveryCharge"),
-    paymentInstructions: typeof body.paymentInstructions === "string" ? body.paymentInstructions.trim().slice(0, 1000) : setting("paymentInstructions"),
-  };
-  if (next.upiId && !/^[\w.-]+@[\w.-]+$/.test(next.upiId)) {
-    response.status(400).json({ error: "Enter a valid UPI ID or leave it blank." });
-    return;
-  }
-  const now = new Date().toISOString();
-  for (const [key, value] of Object.entries(next)) run("INSERT INTO store_settings (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at", [key, value, now]);
-  response.json({ settings: publicPaymentSettings() });
+  response.json({ user: publicUser(user), message: "Admin access verified." });
 });
 
 router.get("/cart", (request, response) => {
@@ -757,7 +512,7 @@ router.post("/orders", (request, response) => {
   if (!user) return;
   const address = request.body?.address;
   const paymentMethod = request.body?.paymentMethod;
-  if ((paymentMethod !== "full" && paymentMethod !== "booking") || (paymentMethod === "full" && setting("fullPaymentEnabled") !== "true") || (paymentMethod === "booking" && setting("bookingPaymentEnabled") !== "true")) {
+  if (paymentMethod !== "full" && paymentMethod !== "booking") {
     response.status(400).json({ error: "Choose full payment or the ₹100 booking option." });
     return;
   }
@@ -783,9 +538,9 @@ router.post("/orders", (request, response) => {
     return;
   }
   const subtotal = items.reduce((total, item) => total + item.lineTotal, 0);
-  const shipping = subtotal > Number(setting("deliveryThreshold")) ? 0 : Number(setting("deliveryCharge"));
+  const shipping = subtotal > 500 ? 0 : 60;
   const total = subtotal + shipping;
-  const paymentDue = paymentMethod === "booking" ? Number(setting("bookingAmount")) : total;
+  const paymentDue = paymentMethod === "booking" ? 100 : total;
   const id = randomUUID();
   const orderNumber = `BB-${new Date().toISOString().slice(2, 10).replaceAll("-", "")}-${id.slice(0, 5).toUpperCase()}`;
   const now = new Date().toISOString();

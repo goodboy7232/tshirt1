@@ -1,7 +1,7 @@
 export type Product = {
   id: string;
   name: string;
-  type: 'Round neck' | 'V neck' | 'Polo collar';
+  type: 'Round neck' | 'Polo collar';
   fit: 'Regular fit' | 'Oversized';
   neck: 'Round neck' | 'V neck' | 'Polo collar';
   price: number;
@@ -9,7 +9,6 @@ export type Product = {
   colorName: string;
   gsm: string;
   tag: string;
-  description?: string;
   image: string;
 };
 
@@ -20,9 +19,6 @@ export type ReadyMadeDesign = {
   color: string;
   accent: string;
   mark: string;
-  description?: string;
-  tags?: string;
-  image?: string;
 };
 
 export const products: Product[] = [
@@ -30,7 +26,7 @@ export const products: Product[] = [
   { id: 'regular-black', name: 'Regular Fit Black Tee', type: 'Round neck', fit: 'Regular fit', neck: 'Round neck', price: 220, color: '#202228', colorName: 'Jet black', gsm: '180 GSM cotton', tag: 'Everyday', image: '' },
   { id: 'oversized-black', name: 'Oversized Street Tee', type: 'Round neck', fit: 'Oversized', neck: 'Round neck', price: 280, color: '#202228', colorName: 'Washed black', gsm: '240 GSM heavyweight', tag: 'Oversized', image: '/product-images/oversized-black.jpg' },
   { id: 'oversized-red', name: 'Oversized Statement Tee', type: 'Round neck', fit: 'Oversized', neck: 'Round neck', price: 280, color: '#c83b2d', colorName: 'Street red', gsm: '240 GSM heavyweight', tag: 'New', image: '' },
-  { id: 'v-neck-cream', name: 'V-Neck Essential', type: 'V neck', fit: 'Regular fit', neck: 'V neck', price: 240, color: '#d9c9ae', colorName: 'Warm cream', gsm: '180 GSM cotton', tag: 'V neck', image: '/product-images/v-neck-white.jpg' },
+  { id: 'v-neck-cream', name: 'V-Neck Essential', type: 'Round neck', fit: 'Regular fit', neck: 'V neck', price: 240, color: '#d9c9ae', colorName: 'Warm cream', gsm: '180 GSM cotton', tag: 'V neck', image: '/product-images/v-neck-white.jpg' },
   { id: 'polo-white', name: 'Regular Fit Polo', type: 'Polo collar', fit: 'Regular fit', neck: 'Polo collar', price: 320, color: '#ebe8df', colorName: 'Cloud white', gsm: '220 GSM pique', tag: 'Polo', image: '' },
   { id: 'polo-navy', name: 'Everyday Navy Polo', type: 'Polo collar', fit: 'Regular fit', neck: 'Polo collar', price: 320, color: '#273b65', colorName: 'Midnight navy', gsm: '220 GSM pique', tag: 'Premium', image: '/product-images/polo-navy.jpg' },
   { id: 'polo-green', name: 'Campus Green Polo', type: 'Polo collar', fit: 'Regular fit', neck: 'Polo collar', price: 320, color: '#38584a', colorName: 'Forest green', gsm: '220 GSM pique', tag: 'College pick', image: '' },

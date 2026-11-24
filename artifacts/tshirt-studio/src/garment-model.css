@@ -80,7 +80,7 @@
 .garment-model-right .garment-print-zone rect { stroke: #e84b35; }
 .garment-model-left,
 .garment-model-right {
-  filter: drop-shadow(18px 22px 16px rgba(37, 42, 53, .18));
+  filter: drop-shadow(12px 15px 12px rgba(37, 42, 53, .14));
   transform-origin: 50% 50%;
 }
 

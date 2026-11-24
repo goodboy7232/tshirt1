@@ -25,10 +25,6 @@ Those credentials are intentionally not hard-coded or shared in this repository.
 
 Keep the bootstrap token and admin password private. Use HTTPS in deployment. Do not commit `.env.local` or production credentials.
 
-The admin panel's **Catalog management** tab shows the current catalog and lets an administrator update names, tags, descriptions, prices, colors, garment details, and images. Images can be uploaded as PNG/JPG/WebP files up to 4 MB or entered as an HTTPS/local asset URL. Administrators can also add or remove products. Changes are stored in the API database, apply to future server-side quotes, and are loaded by the storefront from `GET /api/catalog`.
-
-The **Ready-made designs** admin tab manages ready-made categories and designs. Administrators can add categories, edit names/slugs/icons/colors, add designs, assign designs to categories, and edit design names, tags, descriptions, colors, accents, and image URLs. These settings are stored server-side and are loaded by the storefront from `GET /api/ready-made`.
-
 ## Local database and files
 
 Accounts, sessions, carts, saved designs, orders, uploaded design images, and payment screenshots are stored in the API's SQLite file under `artifacts/api-server/data/accounts.sqlite` by default. Set `AUTH_DATA_DIR` to a persistent, backed-up location before deployment. The local SQLite setup is intended for a single API instance; move to managed PostgreSQL/object storage before running multiple API instances or expecting production-grade backups.
